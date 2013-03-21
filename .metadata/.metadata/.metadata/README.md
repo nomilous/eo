@@ -9,7 +9,7 @@
 
 
 
-                      open-corporation |paradigm| ~ for the Love Of Posibility
+                      open-corporation |paradigm| ~ for the Love Of Possibility
 
 
 
