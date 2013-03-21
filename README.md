@@ -1,4 +1,1 @@
-eo
-==
-
 eo ipso
