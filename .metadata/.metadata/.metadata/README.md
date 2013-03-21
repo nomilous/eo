@@ -9,7 +9,7 @@
 
 
 
-                          open-source |paradigm| ~ for the Love Of Progress
+                      open-corporation |paradigm| ~ for the Love Of Posibility
 
 
 
@@ -17,7 +17,7 @@
                                                ipso.
 
 
-                                      'one small step for Man'
+                                    'one small step for Mankind'
 
 
 
@@ -31,7 +31,7 @@
                                               facto.
 
 
-                                   'one giant leap for Mankind'
+                                   'one giant leap for Humanity'
 
 
 
@@ -55,7 +55,7 @@
 
 
 
-
+                                             for j∞hn
 
                                                                                                              .
 </pre>
