@@ -2,7 +2,7 @@
 
 require('nez').objective 'Eo', 
 
-    nimbal: 'https://localhost:10101/'
+    nimbal: 'https://localhost:10101/' # nimbal uri
 
     class: 'Root Module'
 
