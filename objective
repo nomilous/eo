@@ -1,0 +1,21 @@
+#!/usr/bin/env coffee
+
+require('nez').objective 'Eo', 
+
+    nimbal: 'https://localhost:10101/'
+
+    class: 'Root Module'
+
+    classification: 'Realization Framework'
+
+    description: """
+
+        A Nez plugin to extend the scaffold with a capacity 
+        to articulate an objective and the corresponding 
+        mechanics required to inform associated metrics 
+        into the greater system. 
+
+    """, (requirement) -> 
+
+        requirement.link 'requirement/objective'
+        requirement.link 'requirement/assignment'

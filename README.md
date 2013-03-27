@@ -1,5 +1,8 @@
+eo
+=======
 
+Objective plugin [for](https://github.com/nomilous/ipso) [nez](https://github.com/nomilous/nez)
 
-**We** *can!*, eo ipso
+### Development Environment 
 
-
+[./objective](https://github.com/nomilous/eo/blob/master/objective)
