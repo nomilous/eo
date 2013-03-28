@@ -6,6 +6,8 @@ module.exports = uplink =
 
     start: (uri) -> 
 
+        console.log 'uplinking'
+
         uplink.context = plex.start 
 
             connect: 
