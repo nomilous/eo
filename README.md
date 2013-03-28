@@ -1,7 +1,7 @@
 eo
 =======
 
-Objective plugin [for](https://github.com/nomilous/ipso) [nez](https://github.com/nomilous/nez)
+Objective plugins [for](https://github.com/nomilous/ipso) [nez](https://github.com/nomilous/nez)
 
 ### Development Environment 
 
