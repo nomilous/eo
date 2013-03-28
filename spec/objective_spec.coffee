@@ -37,3 +37,19 @@ require('nez').realize 'Objective', (Objective, test, context, should, Uplink) -
                 test done
 
             objective.configure null, nimbal: 'UPLINK_URI', secret: 'i1duh'
+
+
+        it 'uses a default protocol', (done) -> 
+
+
+            swap = Uplink.start
+            Uplink.start = (uri, secret, protocol) -> 
+
+                Uplink.start = swap
+                uri.should.equal 'UPLINK_URI'
+                secret.should.equal 'i1duh'
+                protocol.should.be.an.instanceof Function
+                test done
+
+            objective.configure null, nimbal: 'UPLINK_URI', secret: 'i1duh'
+

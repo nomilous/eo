@@ -4,9 +4,7 @@ module.exports = uplink =
 
     context: null 
 
-    start: (uri, secret) -> 
-
-        console.log 'uplinking: ', arguments
+    start: (uri, secret, protocol) -> 
 
         uplink.context = plex.start 
 
@@ -17,4 +15,5 @@ module.exports = uplink =
                 adaptor: 'socket.io'
                 uri: uri
 
+            protocol: protocol
 
