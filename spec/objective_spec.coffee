@@ -1,4 +1,4 @@
-require('nez').realize 'Objective', (Objective, test, context) -> 
+require('nez').realize 'Objective', (Objective, test, context, should) -> 
 
     context 'as nez objective plugin', (it) ->
 
