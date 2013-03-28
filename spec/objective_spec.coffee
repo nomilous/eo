@@ -29,10 +29,11 @@ require('nez').realize 'Objective', (Objective, test, context, should, Uplink) -
         it 'connects to nimbal as an "Active Objective"', (done) -> 
 
             swap = Uplink.start
-            Uplink.start = (uri) -> 
+            Uplink.start = (uri, secret) -> 
 
                 Uplink.start = swap
                 uri.should.equal 'UPLINK_URI'
+                secret.should.equal 'i1duh'
                 test done
 
-            objective.configure null, nimbal: 'UPLINK_URI'
+            objective.configure null, nimbal: 'UPLINK_URI', secret: 'i1duh'

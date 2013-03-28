@@ -2,17 +2,15 @@ Uplink = require './uplink'
 
 module.exports = class Objective
 
-    uplink: null
-
     configure: (scaffold, opts) -> 
 
         console.log opts
 
         if opts.nimbal
 
-            Uplink.start opts.nimbal
+            Uplink.start opts.nimbal, opts.secret
 
-            
+
 
     edge: (placeholder, nodes) -> 
 

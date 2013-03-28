@@ -4,11 +4,13 @@ module.exports = uplink =
 
     context: null 
 
-    start: (uri) -> 
+    start: (uri, secret) -> 
 
-        console.log 'uplinking'
+        console.log 'uplinking: ', arguments
 
         uplink.context = plex.start 
+
+            secret: secret
 
             connect: 
 
