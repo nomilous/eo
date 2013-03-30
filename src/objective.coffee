@@ -21,13 +21,31 @@ module.exports = class Objective
             unless typeof @protocol == 'function'
 
                 #
-                # default empty protocol 
+                # Default protocol.
+                # 
+                # Objective implementations should define 
+                # their own protocols.
                 #
 
                 @protocol = (When, Then) -> 
 
 
-            Uplink.start opts.nimbal, opts.secret, @protocol
+            Uplink.start opts.nimbal, opts.secret, @bind, @protocol
+
+
+
+    #
+    # Create local bind to PubSub
+    #
+
+    uplink: {}
+    
+    bind: (When, Then) =>
+
+        @uplink.When = When
+        @uplink.Then = Then
+
+
 
 
     edge: (placeholder, nodes) -> 
@@ -37,4 +55,3 @@ module.exports = class Objective
     handles: []
 
     matches: []
-
