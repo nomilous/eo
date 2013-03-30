@@ -4,9 +4,19 @@ module.exports = class Objective
 
     configure: (scaffold, opts) -> 
 
-        console.log opts
-
         if opts.nimbal
+
+            #
+            # Uplink this objective to a Nimbal server instance
+            # 
+            # This option is activated when the objective specifies
+            # the config key(s): 
+            # 
+            #   nimbal: <uri>
+            #   secret: <optional_secret>
+            # 
+            # 
+            #
 
             unless typeof @protocol == 'function'
 

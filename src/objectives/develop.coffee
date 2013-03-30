@@ -1,7 +1,6 @@
 Objective = require '../objective'
 
-class Dev extends Objective
-
+class Develop extends Objective
 
     protocol: (When, Then) -> 
 
@@ -23,6 +22,6 @@ class Dev extends Objective
 
 if typeof dev == 'undefined'
 
-    dev = new Dev
+    dev = new Develop
 
 module.exports = dev
