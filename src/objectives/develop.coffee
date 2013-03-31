@@ -10,8 +10,8 @@ class Develop extends Objective
     protocol: (When, Then) -> 
 
 
-if typeof dev == 'undefined'
+if typeof develop == 'undefined'
 
-    dev = new Develop
+    develop = new Develop
 
-module.exports = dev
+module.exports = develop
