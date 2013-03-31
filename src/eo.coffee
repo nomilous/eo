@@ -13,7 +13,7 @@ module.exports =
     #
     # **Export:** [Develop](objectives/develop.html)
     # **Inject:** `eo:Develop`
-    # **__Edge:** nimbal
+    # **Uplink:** `nimbal:Server`
     # 
     # Software Development Objective
     # 
