@@ -74,7 +74,7 @@ module.exports = class Objective
                     Entity:         
                         owner: {}
 
-                        interfaces: [
+                        implements: [
                             { class: 'symbal:Objective', version: 0 }
                         ]
 
