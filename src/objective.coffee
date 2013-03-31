@@ -53,6 +53,12 @@ module.exports = class Objective
         @uplink.When = When
         @uplink.Then = Then
 
+        When 'register:req', (payload) -> 
+
+        When 'register!', (payload) -> 
+
+            console.log 'register!', payload
+
 
     edge: (placeholder, nodes) -> 
 

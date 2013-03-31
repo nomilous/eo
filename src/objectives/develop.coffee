@@ -4,19 +4,19 @@ class Develop extends Objective
 
     protocol: (When, Then) -> 
 
-        When 'register:req', (payload) -> 
+        # When 'register:req', (payload) -> 
 
-            #
-            # received a registration request,
-            # send the response
-            # 
+        #     #
+        #     # received a registration request,
+        #     # send the response
+        #     # 
 
-            Then 'register:res'
+        #     Then 'register:res'
 
-                todo: 'send' 
-                the:  'objective' 
-                meta: 'data'
-                to:   'nimbal'
+        #         todo: 'send' 
+        #         the:  'objective' 
+        #         meta: 'data'
+        #         to:   'nimbal'
 
 
 
