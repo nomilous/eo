@@ -1,3 +1,8 @@
+#
+# TODO: move this to nezcore ti deplicate 
+#       definitions in eo, ipso
+# 
+
 plex = require 'plex'
 
 module.exports = uplink =
