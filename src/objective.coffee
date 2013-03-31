@@ -22,15 +22,12 @@ module.exports = class Objective
 
                 #
                 # Default protocol.
-                # 
-                # Objective implementations should define 
-                # their own protocols.
                 #
 
                 @protocol = (When, Then) -> 
 
 
-            Uplink.start opts.nimbal, opts.secret, @bind, @protocol
+            Uplink.start opts.nimbal, opts.secret, @bind
 
 
 
@@ -42,10 +39,19 @@ module.exports = class Objective
     
     bind: (When, Then) =>
 
+        # 
+        # Objective implementations should define 
+        # their own protocols.
+        #
+
+        @protocol When, Then
+
+        #
+        # Local bind for builtin Objective infrastructure
+        #
+
         @uplink.When = When
         @uplink.Then = Then
-
-
 
 
     edge: (placeholder, nodes) -> 

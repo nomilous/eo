@@ -4,7 +4,7 @@ module.exports = uplink =
 
     context: null 
 
-    start: (uri, secret, bind, protocol) -> 
+    start: (uri, secret, bind) -> 
 
         uplink.context = plex.start 
 
@@ -15,19 +15,5 @@ module.exports = uplink =
                 adaptor: 'socket.io'
                 uri: uri
 
-            protocol: (When, Then) -> 
-
-                #
-                # Base Objective binds to the connection for
-                # for transmission of edge traversal events.
-                #
-
-                bind When, Then
-
-                #
-                # Objective implementations bind their own 
-                # protocol.
-                #
-
-                protocol When, Then
+            protocol: bind
 

@@ -28,28 +28,58 @@ require('nez').realize 'Objective', (Objective, test, context, should, Uplink) -
 
         it 'connects to nimbal as an "Active Objective"', (done) -> 
 
+            #
+            # moch uplink starting
+            #
+
             swap = Uplink.start
-            Uplink.start = (uri, secret) -> 
+            Uplink.start = (uri, secret, bind) -> 
 
                 Uplink.start = swap
                 uri.should.equal 'UPLINK_URI'
                 secret.should.equal 'i1duh'
+                bind.should.be.an.instanceof Function
+                bind.should.equal objective.bind
+
                 test done
 
             objective.configure null, nimbal: 'UPLINK_URI', secret: 'i1duh'
 
 
-        it 'uses a default protocol', (done) -> 
+        it 'allows the objective to define a protocol', (done, plex) -> 
 
+            #
+            # mock a connection...
+            #
 
-            swap = Uplink.start
-            Uplink.start = (uri, secret, protocol) -> 
+            swap = plex.start
+            plex.start = (opts) -> 
 
-                Uplink.start = swap
-                uri.should.equal 'UPLINK_URI'
-                secret.should.equal 'i1duh'
-                protocol.should.be.an.instanceof Function
-                test done
+                #
+                # ...by calling protocol bind immediately on start
+                #    with fake attached send and receive interfaces.
+                # 
+                #    (this call usually only happens on connect) 
+                #
+
+                opts.protocol ( -> 'SUBSCRIBER' ), ( -> 'PUBLISHER')
+
+            protocolBind = false
+            objective.protocol = (When, Then) -> 
+
+                When().should.equal 'SUBSCRIBER'
+                Then().should.equal 'PUBLISHER'
+                protocolBind = true
 
             objective.configure null, nimbal: 'UPLINK_URI', secret: 'i1duh'
 
+            protocolBind.should.equal true
+
+            #
+            # did the objective also bind internally 
+            #
+
+            objective.uplink.When().should.equal 'SUBSCRIBER'
+            objective.uplink.Then().should.equal 'PUBLISHER' 
+
+            test done
