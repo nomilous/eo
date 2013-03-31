@@ -26,9 +26,18 @@ module.exports = class Objective
 
                 @protocol = (When, Then) -> 
 
+            unless typeof @instance == 'function'
+
+                #
+                # Default instance
+                #
+
+                @instance = -> 
+
+                    class: 'eo:Objective'
+                    version: 0
 
             Uplink.start opts.nimbal, opts.secret, @bind
-
 
 
     #
@@ -53,11 +62,31 @@ module.exports = class Objective
         @uplink.When = When
         @uplink.Then = Then
 
-        When 'register:req', (payload) -> 
+        When 'register?', (payload) => 
 
-        When 'register!', (payload) -> 
+            #
+            # respond to node registration
+            #
 
-            console.log 'register!', payload
+            Then 'register!', 
+
+                _node:
+                    Entity:         
+                        owner: {}
+
+                        interfaces: [
+                            { class: 'symbal:Objective', version: 0 }
+                        ]
+
+                        #
+                        # Objectives should define instance()
+                        # to return eg. 
+                        # 
+                        #  class: <module>:<ClassName>
+                        #  version: N
+                        #  
+
+                        instance: @instance()
 
 
     edge: (placeholder, nodes) -> 
