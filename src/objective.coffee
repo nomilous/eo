@@ -72,8 +72,7 @@ module.exports = class Objective
 
                 _node:
                     Entity:         
-                        owner: {}
-
+                        
                         implements: [
                             { class: 'symbal:Objective', version: 0 }
                         ]
