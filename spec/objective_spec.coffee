@@ -1,4 +1,4 @@
-require('nez').realize 'Objective', (Objective, test, context, should, Uplink) -> 
+require('nez').realize 'Objective', (Objective, test, context, should) -> 
 
     context 'as nez objective plugin', (it) ->
 
@@ -26,43 +26,9 @@ require('nez').realize 'Objective', (Objective, test, context, should, Uplink) -
             objective.matches.should.be.an.instanceof Array
             test done              
 
-        it 'connects to nimbal as an "Active Objective"', (done) -> 
 
-            #
-            # moch uplink starting
-            #
+        it 'allows the objective to define a protocol', (done) -> 
 
-            swap = Uplink.start
-            Uplink.start = (uri, secret, bind) -> 
-
-                Uplink.start = swap
-                uri.should.equal 'UPLINK_URI'
-                secret.should.equal 'i1duh'
-                bind.should.be.an.instanceof Function
-                bind.should.equal objective.bind
-
-                test done
-
-            objective.configure null, nimbal: 'UPLINK_URI', secret: 'i1duh'
-
-
-        it 'allows the objective to define a protocol', (done, plex) -> 
-
-            #
-            # mock a connection...
-            #
-
-            swap = plex.start
-            plex.start = (opts) -> 
-
-                #
-                # ...by calling protocol bind immediately on start
-                #    with fake attached send and receive interfaces.
-                # 
-                #    (this call usually only happens on connect) 
-                #
-
-                opts.protocol ( -> 'SUBSCRIBER' ), ( -> 'PUBLISHER')
 
             protocolBind = false
             objective.protocol = (When, Then) -> 
@@ -71,7 +37,7 @@ require('nez').realize 'Objective', (Objective, test, context, should, Uplink) -
                 Then().should.equal 'PUBLISHER'
                 protocolBind = true
 
-            objective.configure null, nimbal: 'UPLINK_URI', secret: 'i1duh'
+            objective.bind ( -> 'SUBSCRIBER' ), ( -> 'PUBLISHER')
 
             protocolBind.should.equal true
 

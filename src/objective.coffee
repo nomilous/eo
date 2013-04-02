@@ -1,43 +1,6 @@
-Uplink = require './uplink'
-
 module.exports = class Objective
 
-    configure: (scaffold, opts) -> 
-
-        if opts.nimbal
-
-            #
-            # Uplink this objective to a Nimbal server instance
-            # 
-            # This option is activated when the objective specifies
-            # the config key(s): 
-            # 
-            #   nimbal: <uri>
-            #   secret: <optional_secret>
-            # 
-            # 
-            #
-
-            unless typeof @protocol == 'function'
-
-                #
-                # Default protocol.
-                #
-
-                @protocol = (When, Then) -> 
-
-            unless typeof @instance == 'function'
-
-                #
-                # Default instance
-                #
-
-                @instance = -> 
-
-                    class: 'eo:Objective'
-                    version: 0
-
-            Uplink.start opts.nimbal, opts.secret, @bind
+    configure: (scaffold, opts) ->
 
 
     #

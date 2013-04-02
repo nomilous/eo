@@ -12,8 +12,7 @@
   "main": "./lib/eo",
   "repository": "git@github.com:nomilous/eo.git",
   "dependencies": {
-    "nezcore": "0.0.1",
-    "plex": "0.0.7"
+    "nezcore": "0.0.1"
   },
   "devDependencies": {
     "nez": "0.0.7",
