@@ -38,6 +38,7 @@ module.exports = class Objective
                         
                         implements: [
                             { class: 'symbal:Objective', version: 0 }
+                            { class: 'symbal:Collaborator', version: 0 }
                         ]
 
                         #
