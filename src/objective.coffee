@@ -1,6 +1,17 @@
 module.exports = class Objective
 
-    configure: (scaffold, opts) ->
+    configure: (@runtime, scaffold, opts) ->
+
+
+    #
+    # Objective should define monitor to 
+    # detect/schedule the need to perform
+    # a validation run
+    #
+
+    monitor: (callback) -> 
+
+        @runtime.logger.warn -> 'Plugin did not override Objective.monitor()'
 
 
     #

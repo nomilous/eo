@@ -49,3 +49,12 @@ require('nez').realize 'Objective', (Objective, test, context, should) ->
             objective.uplink.Then().should.equal 'PUBLISHER' 
 
             test done
+
+        it 'defines a monitor loop', (done) -> 
+
+            objective.configure logger: warn: (msgFn) -> 
+
+                msgFn().should.equal 'Plugin did not override Objective.monitor()'
+                test done
+
+            objective.monitor (error, event) ->
