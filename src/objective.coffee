@@ -1,6 +1,6 @@
 module.exports = class Objective
 
-    configure: (@runtime, scaffold, opts) ->
+    configure: (@runtime, @scaffold, @config) ->
 
 
     #
@@ -11,7 +11,7 @@ module.exports = class Objective
 
     monitor: (callback) -> 
 
-        @runtime.logger.warn -> 'Plugin did not override Objective.monitor()'
+        @runtime.logger.warn -> 'plugin did not override Objective.monitor()'
 
 
     #

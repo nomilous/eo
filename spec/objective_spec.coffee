@@ -54,7 +54,7 @@ require('nez').realize 'Objective', (Objective, test, context, should) ->
 
             objective.configure logger: warn: (msgFn) -> 
 
-                msgFn().should.equal 'Plugin did not override Objective.monitor()'
+                msgFn().should.equal 'plugin did not override Objective.monitor()'
                 test done
 
             objective.monitor (error, event) ->
