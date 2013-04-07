@@ -16,14 +16,33 @@ class Develop extends Objective
 
                 paths: [specDir, srcDir]
 
-        @runtime.monitors.directory.watch specDir, (error, file, stat) -> 
+
+        @runtime.monitors.directory.watch specDir, (error, file, stat) => 
+
+            if error 
+                
+                return @runtime.logger.error -> 
+
+                    'failed watch': error: error
 
             console.log 'changes!', arguments
 
-        @runtime.monitors.directory.watch srcDir, (error, file, stat) -> 
 
-            console.log 'changes!', arguments
+        @runtime.monitors.directory.watch srcDir, (error, file, stat) => 
 
+            if error
+
+                return @runtime.logger.error -> 
+
+                    'failed watch': error: error
+
+            type = file.match(/\.(\w*)$/)[1]
+
+            @runtime.compilers[type].compile @runtime.logger, file, (error) -> 
+
+                unless error
+
+                    console.log 'TODO: call realizer'
 
 
 
