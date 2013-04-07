@@ -1,24 +1,6 @@
 module.exports = class Objective
 
     configure: (@runtime, @scaffold, @config) ->
-
-
-        @scaffold.emitter.on 'enter', (error, stack) -> 
-
-            console.log '\nENTER:', stack, '\n'
-
-
-        @scaffold.emitter.on 'exit', (error, stack) -> 
-
-            console.log '\nEXIT:', stack, '\n'
-
-
-        @scaffold.emitter.on 'tree:traverse', (traversal) -> 
-
-            console.log '\nTRAVERSAL:', JSON.stringify(traversal, null, 2), '\n'
-
-
-
             
     #
     # Objective should define monitor to 
@@ -37,7 +19,7 @@ module.exports = class Objective
 
     uplink: {}
     
-    bind: (When, Then) =>
+    bind: (When, Then, edge) =>
 
         # 
         # Objective implementations should define 
@@ -56,12 +38,30 @@ module.exports = class Objective
         When 'register?', (payload) => 
 
             #
+            # uplink sent register request
+            #
+
+            @runtime.logger.log
+
+                verbose: => 'handling uplink register request':
+
+                    localId: edge.localId()
+
+
+            @uplink = 
+
+                edge: edge
+                when: When
+                then: Then
+
+            #
             # respond to node registration
             #
 
             Then 'register!', 
 
                 _node:
+
                     Entity:         
                         
                         implements: [
