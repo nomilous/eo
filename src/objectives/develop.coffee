@@ -5,10 +5,13 @@ class Develop extends Objective
     monitor: (callback) -> 
 
         @config.spec = 'spec' unless @config.spec
-        @config.src = 'src' unless @config.src
+        @config.src  = 'src' unless @config.src
+        @config.dst  = 'lib' unless @config.dst
 
-        specDir = @config.path + '/' + @config.spec
-        srcDir = @config.path + '/' + @config.src
+        path    = @config.path
+        specDir = path + '/' + @config.spec
+        srcDir  = path + '/' + @config.src
+        dstDir  = path + '/' + @config.dst
 
         @runtime.logger.log
 
@@ -38,11 +41,15 @@ class Develop extends Objective
 
             type = file.match(/\.(\w*)$/)[1]
 
-            @runtime.compilers[type].compile @runtime.logger, file, (error) -> 
+            @runtime.compilers[type].compile @runtime.logger, 
 
-                unless error
+                src: srcDir
+                dst: dstDir
+                file: file, (error) -> 
 
-                    console.log 'TODO: call realizer'
+                    unless error
+
+                        console.log 'TODO: call realizer'
 
 
 
