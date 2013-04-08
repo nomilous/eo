@@ -24,7 +24,7 @@ require('nez').realize 'Develop', (Develop, test, context) ->
                 monitors: directory: watch: (path, callback) ->
                     watches.push path
  
-            Develop.monitor()
+            Develop.monitor ->
             watches.should.eql [
 
                 '/path/to/module/repo/spec'
@@ -55,4 +55,4 @@ require('nez').realize 'Develop', (Develop, test, context) ->
 
                     test done
 
-            Develop.monitor()
+            Develop.monitor ->

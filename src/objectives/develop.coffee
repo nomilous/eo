@@ -28,7 +28,10 @@ class Develop extends Objective
 
                     'failed watch': error: error
 
-            console.log 'changes!', arguments
+            callback null, 
+
+                action: 'startLocalRealizer'
+                script: file
 
 
         @runtime.monitors.directory.watch srcDir, (error, file, stat) => 
@@ -45,12 +48,29 @@ class Develop extends Objective
 
                 src: srcDir
                 dst: dstDir
-                file: file, (error) -> 
+                file: file, (error) => 
 
-                    unless error
+                    if error
+                        callback error
+                        return
 
-                        console.log 'TODO: call realizer'
+                    @runtime.compilers[type].ensureSpec @runtime.logger, 
 
+                        spec: specDir
+                        src: srcDir
+                        file: file, (error, created) -> 
+
+                            if error
+                                callback error
+                                return
+
+                            unless created
+                                return
+
+                            callback null, 
+
+                                action: 'startLocalRealizer'
+                                script: created
 
 
     instance: -> 
