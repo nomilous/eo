@@ -3,7 +3,7 @@ eo
 
 Objective plugins for [nez](https://github.com/nomilous/nez) <br />
 <br />
-eo [ipso](https://github.com/nomilous/ipso) 
+"eo [ipso](https://github.com/nomilous/ipso)"
 
 ### Development Environment 
 
