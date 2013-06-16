@@ -18,6 +18,8 @@ require('nez').realize 'Develop', (Develop, test, context) ->
         it 'sends objective::start event', (done) -> 
 
             Develop.start CONTEXT, NOTIFIER, ->
-            EVENTS['objective::start'].should.eql objective: CONTEXT
+            EVENTS['objective::start'].should.eql 
+                class: 'eo:develop'
+                properties: CONTEXT
             test done
 

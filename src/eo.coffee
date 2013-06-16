@@ -1,14 +1,14 @@
 notice         = require 'notice'
 module.exports = (context, moduleFn) ->
 
-    #
-    # create messenger source
-    #
+    unless context.module? 
 
-    notifier = notice.create 'objective', (msg, next) -> next()
+        context.module = require './objectives/develop'
 
-    unless context.runtime? 
+    if typeof context.module == 'string'
 
-        context.runtime = require './objectives/develop'
+        context.module = require context.module
 
-    context.runtime.start context, notifier, moduleFn
+    notifier = notice.create 'objective', context.module.messenger || (msg, next) -> next()
+
+    context.module.start context, notifier, moduleFn

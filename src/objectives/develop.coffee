@@ -1,15 +1,40 @@
-exports.start = (context, notifier, moduleFn) ->
+start = (context, notifier, moduleFn) ->
 
-    notifier.use (msg, next) -> 
+    #
+    # message middleware - to/fro nimbal, later...
+    # 
 
-        #
-        # temporary notifier middleware - for devtime viewing
-        #
+    notifier.use (msg, next) -> next()
 
-        console.log JSON.stringify msg.content, null, 2
-        next()
+    #
+    # develop env defaults
+    #
 
+    context.spec  = './spec' unless context.spec? 
+    context.lib   = './lib'  unless context.lib?
+    context.src   = './src'  unless context.src?
 
-    notifier.event 'objective::start', objective: context
+    #
+    # notify and start
+    #
+
+    notifier.event 'objective::start', 
+        class: 'eo:develop'
+        properties: context
 
     moduleFn()
+
+
+messenger = (msg, next) -> 
+
+    #
+    # default console output for eo::develop
+    #
+
+    console.log JSON.stringify msg.content, null, 2
+    next()
+
+
+
+exports.start     = start
+exports.messenger = messenger
