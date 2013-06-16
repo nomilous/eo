@@ -1,3 +1,14 @@
-module.exports = (notifier, context, fn) -> 
+notice         = require 'notice'
+module.exports = (context, fn) ->
 
-    fn()
+    #
+    # create messenger source
+    #
+
+    notifier = notice.create 'objective', (msg, next) -> next()
+
+    unless context.runtime? 
+
+        context.runtime = require './objectives/develop'
+
+    context.runtime.start notifier, context, fn
