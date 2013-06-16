@@ -1,8 +1,6 @@
 #!/usr/bin/env coffee
 
-require('nez').objective 'Eo', 
-
-    nimbal: 'https://localhost:10101/' # nimbal uri
+require('nez').objective 'eo', 
 
     class: 'Root Module'
 
@@ -16,6 +14,3 @@ require('nez').objective 'Eo',
         into the greater system. 
 
     """, (requirement) -> 
-
-        requirement.link 'requirement/objective'
-        requirement.link 'requirement/assignment'
