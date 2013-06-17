@@ -12,6 +12,7 @@
   "main": "./lib/eo",
   "repository": "git@github.com:nomilous/eo.git",
   "dependencies": {
+    "also": "0.0.2"
   },
   "devDependencies": {
     "nez": "0.0.7",
