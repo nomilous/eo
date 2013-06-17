@@ -1,5 +1,4 @@
-notice         = require 'notice'
-module.exports = (context, moduleFn) ->
+eo = (context, notifier, moduleFn) ->
 
     unless context.module? 
 
@@ -9,6 +8,20 @@ module.exports = (context, moduleFn) ->
 
         context.module = require context.module
 
-    notifier = notice.create 'objective', context.module.messenger || (msg, next) -> next()
-
     context.module.start context, notifier, moduleFn
+
+
+
+messenger = (msg, next) -> 
+
+    #
+    # default console output for eo
+    #
+
+    console.log JSON.stringify msg.content, null, 2
+    next()
+
+
+eo.develop     = require './objectives/develop'
+eo.messenger   = messenger
+module.exports = eo

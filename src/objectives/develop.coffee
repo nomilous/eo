@@ -25,16 +25,6 @@ start = (context, notifier, moduleFn) ->
     moduleFn()
 
 
-messenger = (msg, next) -> 
-
-    #
-    # default console output for eo::develop
-    #
-
-    console.log JSON.stringify msg.content, null, 2
-    next()
 
 
-
-exports.start     = start
-exports.messenger = messenger
+exports.start = start

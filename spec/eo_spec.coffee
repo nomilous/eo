@@ -12,18 +12,10 @@ require('nez').realize 'Eo', (Eo, test, it, notice, Develop) ->
     FUNCTION = ->
 
 
-    it 'creates a notifier', (done) -> 
+    it 'exports objectives', (done) -> 
 
-        spy = notice.create
-        notice.create = (source, defualtMiddlewareFn) -> 
-
-            notice.create = spy
-            source.should.equal 'objective'
-            test done
-            NOTIFIER
-
-
-        Eo {}, ->
+        Eo.develop.should.equal Develop
+        test done
 
 
     it 'defaults the runtime plugin to develop', (done) -> 
@@ -41,11 +33,11 @@ require('nez').realize 'Eo', (Eo, test, it, notice, Develop) ->
         Develop.start = (context, notifier, moduleFn) ->  
             Develop.start = spy
             context.should.equal CONTEXT
-            notifier.info.should.be.an.instanceof Function
+            notifier.should.equal NOTIFIER
             moduleFn.should.equal FUNCTION
             test done
 
-        Eo CONTEXT, FUNCTION
+        Eo CONTEXT, NOTIFIER, FUNCTION
 
     
 
