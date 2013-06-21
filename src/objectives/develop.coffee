@@ -15,6 +15,13 @@ start = (context, notifier, moduleFn) ->
     context.src   = './src'  unless context.src?
 
     #
+    # initialize develop objective
+    #
+
+    context.tools.monitor.directory context.src,  (placeholder, file, stat) -> 
+    context.tools.monitor.directory context.spec, (placeholder, file, stat) -> 
+
+    #
     # notify and start
     #
 
