@@ -1,6 +1,24 @@
 develop = require './objectives/develop'
 
 
+validate = (title, opts, objectiveFn) -> 
+
+    context = title: title
+
+    context[key] = opts[key] for key of opts 
+
+    unless typeof title == 'string'
+        throw new Error 'objective(title, opts, fn) requires title as string'
+
+    unless typeof opts.description == 'string'
+        throw new Error 'objective(title, opts, fn) requires opts.description as string'
+
+    unless typeof objectiveFn == 'function'
+        throw new Error 'objective(title, opts, fn) requires function as last argument'
+
+    return context
+    
+
 eo = (context, notifier, moduleFn) ->
 
     unless context.module? 
@@ -25,6 +43,7 @@ messenger = (msg, next) ->
     next()
 
 
+eo.validate    = validate
 eo.develop     = develop
 eo.messenger   = messenger
 module.exports = eo

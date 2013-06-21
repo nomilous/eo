@@ -12,6 +12,39 @@ require('nez').realize 'Eo', (Eo, test, it, notice, Develop) ->
     FUNCTION = ->
 
 
+    it 'validates objective config for title', (done) -> 
+
+        try Eo.validate {}
+        catch error
+            error.should.match /objective\(title, opts, fn\) requires title as string/
+            test done
+
+    it 'validates objective config for description', (done) -> 
+
+        try Eo.validate 'title', {}
+        catch error
+            error.should.match /objective\(title, opts, fn\) requires opts.description as string/
+            test done
+
+
+    it 'validates objective config for function as last arg', (done) -> 
+
+        try Eo.validate 'title', description: 'description'
+        catch error
+            error.should.match /objective\(title, opts, fn\) requires function as last argument/
+            test done
+
+
+    it 'returns the formatted context', (done) -> 
+
+        Eo.validate( 'title', description: 'description', -> ).should.eql
+
+            title: 'title'
+            description: 'description'
+
+        test done
+
+
     it 'exports objectives', (done) -> 
 
         Eo.develop.should.equal Develop
