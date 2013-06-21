@@ -22,6 +22,12 @@ start = (context, notifier, moduleFn) ->
         class: 'eo:develop'
         properties: context
 
+
+    #
+    # call the external objective loop
+    # (args under consideration)
+    # 
+
     moduleFn()
 
 
