@@ -30,20 +30,31 @@ start = (context, notifier, moduleFn) ->
 
             when 'coffee', 'litcoffee'
 
-                compile = context.tools.compiler.coffee.compile
+                compile    = context.tools.compiler.coffee.compile
+                ensureSpec = context.tools.compiler.coffee.ensureSpec
 
             else 
 
-                try compile = context.tools.compiler[ext].compile 
+                try compile    = context.tools.compiler[ext].compile
+                try ensureSpec = context.tools.compiler.coffee.ensureSpec
 
 
-        compile ||= -> console.log 'no compiler for', file
+        compile    ||= -> console.log 'no compiler for', file
+        ensureSpec ||= -> 
         compile
 
             dst: context.lib
             src: context.src
             file: file, (error) -> 
 
+                return unless ensureSpec?
+                return if error?
+
+                ensureSpec 
+
+                    src:  context.src
+                    spec: context.spec
+                    file: file
 
 
 
