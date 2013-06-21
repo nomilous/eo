@@ -1,8 +1,11 @@
+develop = require './objectives/develop'
+
+
 eo = (context, notifier, moduleFn) ->
 
     unless context.module? 
 
-        context.module = require './objectives/develop'
+        context.module = develop
 
     if typeof context.module == 'string'
 
@@ -22,6 +25,6 @@ messenger = (msg, next) ->
     next()
 
 
-eo.develop     = require './objectives/develop'
+eo.develop     = develop
 eo.messenger   = messenger
 module.exports = eo
