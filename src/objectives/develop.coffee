@@ -19,6 +19,34 @@ start = (context, notifier, moduleFn) ->
     #
 
     context.tools.monitor.directory context.src,  (placeholder, file, stat) -> 
+
+        #
+        # src file changed
+        #
+
+        ext = file.match(/\.(\w*)$/)[1]
+
+        switch ext
+
+            when 'coffee', 'litcoffee'
+
+                compile = context.tools.compiler.coffee.compile
+
+            else 
+
+                try compile = context.tools.compiler[ext].compile 
+
+
+        compile ||= -> console.log 'no compiler for', file
+        compile
+
+            dst: context.lib
+            src: context.src
+            file: file, (error) -> 
+
+
+
+
     context.tools.monitor.directory context.spec, (placeholder, file, stat) -> 
 
     #

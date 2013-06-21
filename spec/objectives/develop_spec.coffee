@@ -1,6 +1,7 @@
 require('nez').realize 'Develop', (Develop, test, context, should) -> 
 
     MONITORED = things: {}
+    COMPILED = things: []
     CONTEXT =
 
         title: 'TITLE'
@@ -8,6 +9,9 @@ require('nez').realize 'Develop', (Develop, test, context, should) ->
         tools: 
             monitor: 
                 directory: (dir, cb) -> MONITORED.things[dir] = cb
+            compiler:
+                language: 
+                    compile: -> COMPILED.things.push arguments
     
     EVENTS = {} 
 
@@ -47,5 +51,23 @@ require('nez').realize 'Develop', (Develop, test, context, should) ->
             
                 should.exist MONITORED.things['./app']
                 should.exist MONITORED.things['/dev/darnit']
+                test done
+
+    context 'compile', (it) -> 
+
+        it 'is called from changes in src dir', (done) ->
+
+            MONITORED.values = {}
+            CONTEXT.lib = 'The lips of time'
+            CONTEXT.src = 'the fountain head'
+            
+            Develop.start CONTEXT, NOTIFIER, ->
+
+                #
+                # call a change into the src monitor
+                #
+
+                MONITORED.things['the fountain head'](null, '/file/of/script.language')
+                COMPILED.things[0]['0'].file.should.equal '/file/of/script.language'
                 test done
 
