@@ -29,6 +29,19 @@ eo = (context, notice, moduleFn) ->
 
         context.module = require context.module
 
+
+    context.realizers = 
+
+        task: (title, context, notice, realizer) -> 
+
+            notice.info 'issue task', 
+
+                task: title: title
+                realizer: realizer
+
+
+
+
     context.module.start context, notice, moduleFn
 
 

@@ -40,7 +40,7 @@ start = (context, notice, moduleFn) ->
             else 
 
                 try compile    = context.tools.compiler[ext].compile
-                try ensureSpec = context.tools.compiler.coffee.ensureSpec
+                try ensureSpec = context.tools.compiler[ext].ensureSpec
 
 
         compile    ||= (notice, opts, cb) -> cb null
@@ -66,12 +66,26 @@ start = (context, notice, moduleFn) ->
 
         done.then(
 
-            (res) -> console.log 'RUN SPEC', res[1]
+            (res) -> 
+
+                #
+                # compiled success
+                # send task to the corresponding realizer
+                # 
+
+                specfile = res[1]
+                return unless specfile?
+                realizer = id: specfile
+                context.realizers.task 'run spec', context, notice, realizer
+
             (err) -> notice.info.bad 'compile error', error: err
 
         )
 
     context.tools.monitor.directory notice, context.spec, (placeholder, file, stat) -> 
+
+        realizer = id: file
+        context.realizers.task 'run spec', context, notice, realizer
 
     #
     # notify and start
