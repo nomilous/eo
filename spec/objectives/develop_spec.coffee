@@ -1,10 +1,19 @@
 require('nez').realize 'Develop', (Develop, test, context, should) -> 
 
-    MONITOR = things: {}
-    COMPILE = things: []
-    NOTIFY  = 
+    MONITORED = things: {}
+    COMPILED  = things: []
+    NOTIFIED  = 
         event: {}
         info: {}
+
+
+    MONITOR = (notice, dir, cb) -> 
+        MONITORED.things[dir] = cb
+
+    COMPILER = (notice, opts, cb) -> 
+        COMPILED.things.push arguments
+        cb null
+
 
 
     CONTEXT =
@@ -12,19 +21,17 @@ require('nez').realize 'Develop', (Develop, test, context, should) ->
         description: 'DESCRIPTION'
         tools: 
             monitor: 
-                directory: (notice, dir, cb) -> MONITOR.things[dir] = cb
+                directory: MONITOR
             compiler:
                 language: 
-                    compile: (notice, opts, cb) -> 
-                        COMPILE.things.push arguments
-                        cb null
+                    compile: COMPILER
                         
     
 
     NOTIFIER = 
-        event: (title, payload) -> NOTIFY.event[title] = payload
+        event: (title, payload) -> NOTIFIED.event[title] = payload
         info: 
-            bad: (title, payload) -> NOTIFY.info[title] = payload
+            bad: (title, payload) -> NOTIFIED.info[title] = payload
         use:   ->
         
 
@@ -33,59 +40,61 @@ require('nez').realize 'Develop', (Develop, test, context, should) ->
         it 'sends objective::start event', (done) -> 
 
             Develop.start CONTEXT, NOTIFIER, ->
-            NOTIFY.event['objective::start'].should.eql 
-                class: 'eo:develop'
-                properties: CONTEXT
-            test done
+                NOTIFIED.event['objective::start'].should.eql 
+                    class: 'eo:develop'
+                    properties: CONTEXT
+                test done
 
 
     context 'monitor', (it) -> 
 
         it 'monitors default src and spec directories', (done) -> 
 
-            MONITOR.values = {}
+            MONITORED.things = {}
             Develop.start CONTEXT, NOTIFIER, ->
             
-                should.exist MONITOR.things['./src']
-                should.exist MONITOR.things['./spec']
+                should.exist MONITORED.things['./src']
+                should.exist MONITORED.things['./spec']
                 test done
 
         it 'monitors specified src and spec directory', (done) -> 
 
-            MONITOR.values = {}
+            MONITORED.things = {}
             CONTEXT.src = './app'
             CONTEXT.spec = '/dev/darnit'
             Develop.start CONTEXT, NOTIFIER, ->
             
-                should.exist MONITOR.things['./app']
-                should.exist MONITOR.things['/dev/darnit']
+                should.exist MONITORED.things['./app']
+                should.exist MONITORED.things['/dev/darnit']
                 test done
 
     context 'compile', (it) -> 
 
+        CONTEXT.tools.monitor.directory = (notice, dir, cb) -> 
+
+            cb 'changed', './src/file/of/script.language'
+
         it 'is called from changes in src dir', (done) ->
 
-            MONITOR.things = {}
-            COMPILE.things  = []
-            CONTEXT.lib = 'The lips of time'
-            CONTEXT.src = 'the fountain head'
+            CONTEXT.tools.compiler.language.compile = (notice, opts, cb) -> 
+
+                opts.file.should.eql './src/file/of/script.language'
+                test done
             
             Develop.start CONTEXT, NOTIFIER, ->
 
-                #
-                # call a change into the src monitor
-                #
 
-                MONITOR.things['the fountain head'](null, '/file/of/script.language')
-                setTimeout (-> 
+        it 'notifies of compile error', (done) -> 
 
-                    #
-                    # compiled the file
-                    #
+            CONTEXT.tools.compiler.language.compile = (notice, opts, cb) -> 
 
-                    COMPILE.things[0]['1'].file.should.equal '/file/of/script.language'
-                    test done
+                cb new Error 'compile failed'
 
-                ), 10
-                
+            NOTIFIER.info.bad = (title, msg) -> 
+
+                msg.error.should.match /compile failed/
+                test done
+
+            Develop.start CONTEXT, NOTIFIER, ->
+
 
