@@ -1,10 +1,14 @@
-start = (context, notifier, moduleFn) ->
+nodefncall = require('when/node/function').call
+sequence   = require('when/sequence')
+
+
+start = (context, notice, moduleFn) ->
 
     #
     # message middleware - to/fro nimbal, later...
     # 
 
-    notifier.use (msg, next) -> next()
+    notice.use (msg, next) -> next()
 
     #
     # develop env defaults
@@ -18,10 +22,10 @@ start = (context, notifier, moduleFn) ->
     # initialize develop objective
     #
 
-    context.tools.monitor.directory context.src,  (placeholder, file, stat) -> 
+    context.tools.monitor.directory notice, context.src,  (placeholder, file, stat) -> 
 
         #
-        # src file changed
+        # src file changed, prep compiler
         #
 
         ext = file.match(/\.(\w*)$/)[1]
@@ -39,32 +43,41 @@ start = (context, notifier, moduleFn) ->
                 try ensureSpec = context.tools.compiler.coffee.ensureSpec
 
 
-        compile    ||= -> console.log 'no compiler for', file
-        ensureSpec ||= -> 
-        compile
+        compile    ||= (notice, opts, cb) -> cb null
+        ensureSpec ||= (notice, opts, cb) -> cb null
 
-            dst: context.lib
-            src: context.src
-            file: file, (error) -> 
+        opts = 
 
-                return unless ensureSpec?
-                return if error?
+            file: file
+            spec: context.spec
+            dst:  context.lib
+            src:  context.src
 
-                ensureSpec 
+        #
+        # compile and ensure present (create default) spec file
+        #
 
-                    src:  context.src
-                    spec: context.spec
-                    file: file
+        done = sequence [
 
+            -> nodefncall compile,    notice, opts
+            -> nodefncall ensureSpec, notice, opts
 
+        ]
 
-    context.tools.monitor.directory context.spec, (placeholder, file, stat) -> 
+        done.then(
+
+            (res) -> console.log 'RUN SPEC', res[1]
+            (err) -> notice.info.bad 'compile error', error: err
+
+        )
+
+    context.tools.monitor.directory notice, context.spec, (placeholder, file, stat) -> 
 
     #
     # notify and start
     #
 
-    notifier.event 'objective::start', 
+    notice.event 'objective::start', 
         class: 'eo:develop'
         properties: context
 
@@ -75,6 +88,7 @@ start = (context, notifier, moduleFn) ->
     # 
 
     moduleFn()
+
 
 
 

@@ -1,22 +1,30 @@
 require('nez').realize 'Develop', (Develop, test, context, should) -> 
 
-    MONITORED = things: {}
-    COMPILED = things: []
-    CONTEXT =
+    MONITOR = things: {}
+    COMPILE = things: []
+    NOTIFY  = 
+        event: {}
+        info: {}
 
+
+    CONTEXT =
         title: 'TITLE'
         description: 'DESCRIPTION'
         tools: 
             monitor: 
-                directory: (dir, cb) -> MONITORED.things[dir] = cb
+                directory: (notice, dir, cb) -> MONITOR.things[dir] = cb
             compiler:
                 language: 
-                    compile: -> COMPILED.things.push arguments
+                    compile: (notice, opts, cb) -> 
+                        COMPILE.things.push arguments
+                        cb null
+                        
     
-    EVENTS = {} 
 
     NOTIFIER = 
-        event: (code, payload) -> EVENTS[code] = payload
+        event: (title, payload) -> NOTIFY.event[title] = payload
+        info: 
+            bad: (title, payload) -> NOTIFY.info[title] = payload
         use:   ->
         
 
@@ -25,7 +33,7 @@ require('nez').realize 'Develop', (Develop, test, context, should) ->
         it 'sends objective::start event', (done) -> 
 
             Develop.start CONTEXT, NOTIFIER, ->
-            EVENTS['objective::start'].should.eql 
+            NOTIFY.event['objective::start'].should.eql 
                 class: 'eo:develop'
                 properties: CONTEXT
             test done
@@ -35,29 +43,30 @@ require('nez').realize 'Develop', (Develop, test, context, should) ->
 
         it 'monitors default src and spec directories', (done) -> 
 
-            MONITORED.values = {}
+            MONITOR.values = {}
             Develop.start CONTEXT, NOTIFIER, ->
             
-                should.exist MONITORED.things['./src']
-                should.exist MONITORED.things['./spec']
+                should.exist MONITOR.things['./src']
+                should.exist MONITOR.things['./spec']
                 test done
 
         it 'monitors specified src and spec directory', (done) -> 
 
-            MONITORED.values = {}
+            MONITOR.values = {}
             CONTEXT.src = './app'
             CONTEXT.spec = '/dev/darnit'
             Develop.start CONTEXT, NOTIFIER, ->
             
-                should.exist MONITORED.things['./app']
-                should.exist MONITORED.things['/dev/darnit']
+                should.exist MONITOR.things['./app']
+                should.exist MONITOR.things['/dev/darnit']
                 test done
 
     context 'compile', (it) -> 
 
         it 'is called from changes in src dir', (done) ->
 
-            MONITORED.values = {}
+            MONITOR.things = {}
+            COMPILE.things  = []
             CONTEXT.lib = 'The lips of time'
             CONTEXT.src = 'the fountain head'
             
@@ -67,7 +76,16 @@ require('nez').realize 'Develop', (Develop, test, context, should) ->
                 # call a change into the src monitor
                 #
 
-                MONITORED.things['the fountain head'](null, '/file/of/script.language')
-                COMPILED.things[0]['0'].file.should.equal '/file/of/script.language'
-                test done
+                MONITOR.things['the fountain head'](null, '/file/of/script.language')
+                setTimeout (-> 
+
+                    #
+                    # compiled the file
+                    #
+
+                    COMPILE.things[0]['1'].file.should.equal '/file/of/script.language'
+                    test done
+
+                ), 10
+                
 

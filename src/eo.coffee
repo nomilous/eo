@@ -17,9 +17,9 @@ validate = (title, opts, objectiveFn) ->
         throw new Error 'objective(title, opts, fn) requires function as last argument'
 
     return context
-    
 
-eo = (context, notifier, moduleFn) ->
+
+eo = (context, notice, moduleFn) ->
 
     unless context.module? 
 
@@ -29,7 +29,7 @@ eo = (context, notifier, moduleFn) ->
 
         context.module = require context.module
 
-    context.module.start context, notifier, moduleFn
+    context.module.start context, notice, moduleFn
 
 
 
