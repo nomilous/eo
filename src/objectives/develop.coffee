@@ -75,8 +75,10 @@ start = (context, notice, moduleFn) ->
 
                 specfile = res[1]
                 return unless specfile?
-                realizer = id: specfile
-                context.realizers.task 'run spec', context, notice, realizer
+                realizer = 
+                    id:     specfile
+                    script: specfile
+                context.realizers.task 'run spec', realizer
 
             (err) -> notice.info.bad 'compile error', error: err
 
@@ -84,8 +86,11 @@ start = (context, notice, moduleFn) ->
 
     context.tools.monitor.directory notice, context.spec, (placeholder, file, stat) -> 
 
-        realizer = id: file
-        context.realizers.task 'run spec', context, notice, realizer
+        realizer = 
+            id:     file
+            script: file
+
+        context.realizers.task 'run spec', realizer
 
     #
     # notify and start

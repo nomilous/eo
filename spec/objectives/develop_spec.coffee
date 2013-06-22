@@ -111,7 +111,7 @@ require('nez').realize 'Develop', (Develop, test, context, should) ->
             CONTEXT.realizers.task = -> 
             CONTEXT.tools.compiler.language.compile =    (notice, opts, cb) -> cb null
             CONTEXT.tools.compiler.language.ensureSpec = (notice, opts, cb) -> cb null, './spec/file1_spec'
-            CONTEXT.realizers.task = (title, context, notice, realizer) -> 
+            CONTEXT.realizers.task = (title, realizer) -> 
 
                 realizer.id.should.equal './spec/file1_spec'
                 CONTEXT.realizers.task = ->
