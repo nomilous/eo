@@ -75,10 +75,11 @@ start = (context, notice, moduleFn) ->
 
                 specfile = res[1]
                 return unless specfile?
-                realizer = 
+                
+                context.realizers.task 'run spec', 
+
                     id:     specfile
                     script: specfile
-                context.realizers.task 'run spec', realizer
 
             (err) -> notice.info.bad 'compile error', error: err
 
@@ -86,17 +87,22 @@ start = (context, notice, moduleFn) ->
 
     context.tools.monitor.directory notice, context.spec, (placeholder, file, stat) -> 
 
-        realizer = 
+        #
+        # spec file changed
+        #
+
+        context.realizers.task 'run spec', 
+
             id:     file
             script: file
 
-        context.realizers.task 'run spec', realizer
 
     #
     # notify and start
     #
 
     notice.event 'objective::start', 
+
         class: 'eo:develop'
         properties: context
 
