@@ -5,7 +5,13 @@ validate = (title, opts, objectiveFn) ->
 
     context = title: title
 
-    context[key] = opts[key] for key of opts 
+    context[key]   = opts[key] for key of opts
+
+    #
+    # todo: enforce secret if not listening on localhost
+    #
+    
+    context.secret = '' unless context.secret? 
 
     unless typeof title == 'string'
         throw new Error 'objective(title, opts, fn) requires title as string'

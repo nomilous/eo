@@ -41,6 +41,7 @@ require('nez').realize 'Eo', (Eo, test, it, notice, Develop) ->
 
             title: 'title'
             description: 'description'
+            secret: ''
 
         test done
 
