@@ -126,6 +126,11 @@ start = (context, notice, moduleFn) ->
 
         class: 'eo:develop'
         properties: context
+                    #
+                    # TODO: trim this 
+                    #       - is local runtime context
+                    #       - should be summary for remote's notion of context
+                    #
 
 
     #
