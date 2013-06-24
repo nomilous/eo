@@ -1,6 +1,31 @@
 nodefncall = require('when/node/function').call
 sequence   = require('when/sequence')
 
+getCompiler = (context, file) ->
+
+    ext = file.match(/\.(\w*)$/)[1]
+
+    switch ext
+
+        when 'coffee', 'litcoffee'
+
+            compiler   = context.tools.compiler.coffee.compile
+            ensureSpec = context.tools.compiler.coffee.ensureSpec
+
+        else 
+
+            try compiler   = context.tools.compiler[ext].compile
+            try ensureSpec = context.tools.compiler[ext].ensureSpec
+
+    compiler   ||= (notice, opts, cb) -> cb null
+    ensureSpec ||= (notice, opts, cb) -> cb null
+
+    return {
+        compiler:   compiler
+        ensureSpec: ensureSpec
+    }
+
+
 
 start = (context, notice, moduleFn) ->
 
@@ -28,23 +53,7 @@ start = (context, notice, moduleFn) ->
         # src file changed, prep compiler
         #
 
-        ext = file.match(/\.(\w*)$/)[1]
-
-        switch ext
-
-            when 'coffee', 'litcoffee'
-
-                compile    = context.tools.compiler.coffee.compile
-                ensureSpec = context.tools.compiler.coffee.ensureSpec
-
-            else 
-
-                try compile    = context.tools.compiler[ext].compile
-                try ensureSpec = context.tools.compiler[ext].ensureSpec
-
-
-        compile    ||= (notice, opts, cb) -> cb null
-        ensureSpec ||= (notice, opts, cb) -> cb null
+        {compiler, ensureSpec} = getCompiler context, file
 
         opts = 
 
@@ -59,7 +68,7 @@ start = (context, notice, moduleFn) ->
 
         done = sequence [
 
-            -> nodefncall compile,    notice, opts
+            -> nodefncall compiler,    notice, opts
             -> nodefncall ensureSpec, notice, opts
 
         ]
@@ -88,13 +97,25 @@ start = (context, notice, moduleFn) ->
     context.tools.monitor.directory notice, context.spec, (placeholder, file, stat) -> 
 
         #
-        # spec file changed
-        #
+        # spec file changed, 
+        # ensure it compiles
+        # 
 
-        context.realizers.task 'run spec', 
+        {compiler, ensureSpec} = getCompiler context, file
 
-            id:     file
-            script: file
+        compiler notice, { 
+            
+            file: file
+            src:  context.spec
+
+        }, (error, result) -> 
+
+            return if error?
+
+            context.realizers.task 'run spec', 
+
+                id:     file
+                script: file
 
 
     #
