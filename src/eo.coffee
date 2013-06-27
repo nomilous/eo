@@ -1,5 +1,30 @@
 develop = require './objectives/develop'
+started = false
 
+messenger = (context) -> 
+
+    unless context.module? 
+
+        return develop.messenger
+
+    if typeof context.module.messenger == 'function'
+
+        return context.module.messanger
+
+    #
+    # default console output for eo
+    #
+
+    return (msg, next) -> 
+
+        {title} = msg.context
+
+        unless started
+
+            console.log "objective without messenger"
+            started = true
+
+        next()
 
 validate = (title, opts, objectiveFn) -> 
 
@@ -36,17 +61,6 @@ eo = (context, notice, moduleFn) ->
         context.module = require context.module
 
     context.module.start context, notice, moduleFn
-
-
-
-messenger = (msg, next) -> 
-
-    #
-    # default console output for eo
-    #
-
-    console.log JSON.stringify msg.content, null, 2
-    next()
 
 
 eo.validate    = validate

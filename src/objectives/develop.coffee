@@ -1,5 +1,29 @@
 nodefncall = require('when/node/function').call
 sequence   = require('when/sequence')
+colors     = require 'colors'
+
+messenger = (msg, next) -> 
+
+    {title, type, tenor} = msg.context
+
+    switch title
+
+        when 'objective::start' 
+
+            output = "\n" 
+            for key of msg.properties
+                continue unless typeof msg.properties[key] == 'string'
+                continue if key == 'secret'
+                output += "(#{key}) #{msg.properties[key].bold}\n"
+
+            console.log output
+
+        else 
+
+            console.log msg.content
+
+    next()
+
 
 getCompiler = (context, file) ->
 
@@ -144,4 +168,5 @@ start = (context, notice, moduleFn) ->
 
 
 
-exports.start = start
+exports.start     = start
+exports.messenger = messenger
