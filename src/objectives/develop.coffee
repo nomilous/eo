@@ -112,7 +112,7 @@ start = (context, notice, moduleFn) ->
                 specfile = res[1]
                 return unless specfile?
                 
-                context.realizers.task 'run spec', 
+                context.realizers.task 'spec run', 
 
                     id:     specfile
                     script: specfile
@@ -139,7 +139,7 @@ start = (context, notice, moduleFn) ->
 
             return if error?
 
-            context.realizers.task 'run spec', 
+            context.realizers.task 'spec run', 
 
                 id:     file
                 script: file
