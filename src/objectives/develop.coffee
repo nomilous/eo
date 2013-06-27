@@ -21,9 +21,9 @@ messenger = (msg, next) ->
 
             console.log output
 
-        else 
+        when 'missing or broken realizer'
 
-            console.log msg.content
+            console.log "[#{msg.title}]".red, msg.description.bold
 
     next()
 
