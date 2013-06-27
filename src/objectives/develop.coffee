@@ -14,7 +14,10 @@ messenger = (msg, next) ->
             for key of msg.properties
                 continue unless typeof msg.properties[key] == 'string'
                 continue if key == 'secret'
-                output += "(#{key}) #{msg.properties[key].bold}\n"
+                if msg.properties[key].match /\n/
+                    output += "(#{key})\n#{msg.properties[key].bold}\n"
+                else 
+                    output += "(#{key}) #{msg.properties[key].bold}\n"
 
             console.log output
 
