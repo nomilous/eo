@@ -25,6 +25,10 @@ messenger = (msg, next) ->
 
             console.log "[#{msg.title}]".red, msg.description.bold
 
+        else 
+
+            console.log "[#{msg.title}]", msg.description
+
     next()
 
 
