@@ -116,10 +116,13 @@ start = (context, notice, moduleFn) ->
                 specfile = res[1]
                 return unless specfile?
                 
-                context.realizers.task 'spec run', 
+                context.realizers.task 'run', 
 
-                    id:     specfile
-                    script: specfile
+                    id:       specfile
+                    script:   specfile
+                    module:   'ipso'
+                    class:    'spec'
+                    function: 'run'
 
             (err) -> notice.info.bad 'compile error', error: err
 
@@ -143,10 +146,13 @@ start = (context, notice, moduleFn) ->
 
             return if error?
 
-            context.realizers.task 'spec run', 
+            context.realizers.task 'run', 
 
-                id:     file
-                script: file
+                id:       file
+                script:   file
+                module:   'ipso'
+                class:    'spec'
+                function: 'run'
 
 
     #

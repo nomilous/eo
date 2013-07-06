@@ -140,23 +140,28 @@ require('nez').realize 'Develop', (Develop, test, context, should) ->
 
         #     ), 10
 
-    # context 'spec', (it) -> 
+    context 'spec', (it) -> 
 
-    #     it 'issues task to realizer on spec change', (done) -> 
+        it 'issues task to realizer on spec change', (done) -> 
 
-    #         CONTEXT.tools.monitor.directory = (notice, dir, cb) -> 
+            CONTEXT.tools.monitor.directory = (notice, dir, cb) -> 
 
-    #             if dir.match /spec/
-    #                 cb 'changed', './spec/file_spec'
+                if dir.match /spec/
+                    cb 'changed', './spec/file_spec'
 
-    #         CONTEXT.realizers.task = (title, context, notice, realizer) -> 
+            CONTEXT.realizers.task = (title, context) -> 
 
-    #             console.log arguments
-    #             title.should.equal 'run spec'
-    #             realizer.id.should.equal './spec/file_spec'
-    #             test done
+                title.should.equal 'run'
+                context.should.eql 
+                    id:     './spec/file1_spec'
+                    script: './spec/file1_spec'
+                    module: 'ipso'
+                    class: 'spec'
+                    function: 'run'
 
-    #         Develop.start CONTEXT, NOTIFIER, -> 
+                test done
+
+            Develop.start CONTEXT, NOTIFIER, -> 
 
 
 
