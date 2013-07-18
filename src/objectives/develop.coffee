@@ -74,6 +74,23 @@ start = (context, notice, moduleFn) ->
     context.lib   = './lib'  unless context.lib?
     context.src   = './src'  unless context.src?
 
+
+    running = (promise) -> 
+
+        #
+        # unstable api, this may change...!
+        #
+
+        promise.then(
+
+            (result) -> console.log RESULT: result
+            (error)  -> console.log ERROR:  error
+            (notify) -> console.log NOTIFY: notify
+
+        )
+
+
+
     #
     # initialize develop objective
     #
@@ -116,7 +133,7 @@ start = (context, notice, moduleFn) ->
                 specfile = res[1]
                 return unless specfile?
                 
-                context.realizers.task 'run', 
+                running context.realizers.task 'run', 
 
                     id:       specfile
                     script:   specfile
@@ -146,7 +163,7 @@ start = (context, notice, moduleFn) ->
 
             return if error?
 
-            context.realizers.task 'run', 
+            running context.realizers.task 'run', 
 
                 id:       file
                 script:   file
