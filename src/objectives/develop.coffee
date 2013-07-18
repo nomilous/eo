@@ -75,7 +75,7 @@ start = (context, notice, moduleFn) ->
     context.src   = './src'  unless context.src?
 
 
-    running = (promise) -> 
+    runningTask = (promise) -> 
 
         #
         # unstable api, this may change...!
@@ -83,9 +83,9 @@ start = (context, notice, moduleFn) ->
 
         promise.then(
 
-            (result) -> console.log RESULT: result
-            (error)  -> console.log ERROR:  error
-            (notify) -> console.log NOTIFY: notify
+            (succeed) -> console.log SUCCEED: succeed
+            (fail)    -> console.log FAIL:    fail
+            (update)  -> console.log UPDATE:  update
 
         )
 
@@ -133,7 +133,7 @@ start = (context, notice, moduleFn) ->
                 specfile = res[1]
                 return unless specfile?
                 
-                running context.realizers.task 'run', 
+                runningTask context.realizers.task 'run', 
 
                     id:       specfile
                     script:   specfile
@@ -163,7 +163,7 @@ start = (context, notice, moduleFn) ->
 
             return if error?
 
-            running context.realizers.task 'run', 
+            runningTask context.realizers.task 'run', 
 
                 id:       file
                 script:   file
