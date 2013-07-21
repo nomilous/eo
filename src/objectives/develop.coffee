@@ -116,7 +116,7 @@ start = (context, notice, moduleFn) ->
 
         done = sequence [
 
-            -> nodefncall compiler,    notice, opts
+            -> nodefncall compiler,   notice, opts
             -> nodefncall ensureSpec, notice, opts
 
         ]
@@ -154,22 +154,32 @@ start = (context, notice, moduleFn) ->
 
         {compiler, ensureSpec} = getCompiler context, file
 
-        compiler notice, { 
-            
+        opts = 
             file: file
             src:  context.spec
+            spec: context.spec
 
-        }, (error, result) -> 
+        done = sequence [
 
-            return if error?
+            -> nodefncall compiler,   notice, opts
+            -> nodefncall ensureSpec, notice, opts
 
-            runningTask context.realizers.task 'run', 
+        ]
 
-                id:       file
-                script:   file
-                module:   'ipso'
-                class:    'spec'
-                function: 'run'
+        done.then(
+
+            (res) -> 
+                runningTask context.realizers.task 'run', 
+
+                    id:       file
+                    script:   file
+                    module:   'ipso'
+                    class:    'spec'
+                    function: 'run'
+
+            (err) -> notice.info.bad 'compile error', error: err
+
+        )
 
 
     #
