@@ -60,7 +60,15 @@ eo = (context, notice, moduleFn) ->
 
         context.module = require context.module
 
-    context.module.start context, notice, moduleFn
+    context.module.start context, notice, moduleFn, (task) -> 
+
+        task.then(
+
+            (succeed) -> console.log SUCCEED: succeed
+            (fail)    -> console.log FAIL:    fail
+            (update)  -> console.log UPDATE:  update
+
+        )
 
 
 eo.validate    = validate

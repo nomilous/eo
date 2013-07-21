@@ -1,4 +1,5 @@
 nodefncall = require('when/node/function').call
+fs         = require 'fs'
 sequence   = require('when/sequence')
 colors     = require 'colors'
 
@@ -56,15 +57,17 @@ getCompiler = (context, file) ->
         ensureSpec: ensureSpec
     }
 
+getUUID = (file) -> 
+    
+    try 
+        content = fs.readFileSync( file ).toString()
+        uuid = content.match(/###\sREALIZER\s(.*)?\s###/)[1]
+        return uuid
 
+    catch error
+        return file
 
-start = (context, notice, moduleFn) ->
-
-    #
-    # message middleware - to/fro nimbal, later...
-    # 
-
-    notice.use (msg, next) -> next()
+start = (context, notice, moduleFn, taskCallback) ->
 
     #
     # develop env defaults
@@ -73,23 +76,6 @@ start = (context, notice, moduleFn) ->
     context.spec  = './spec' unless context.spec? 
     context.lib   = './lib'  unless context.lib?
     context.src   = './src'  unless context.src?
-
-
-    runningTask = (promise) -> 
-
-        #
-        # unstable api, this may change...!
-        #
-
-        promise.then(
-
-            (succeed) -> console.log SUCCEED: succeed
-            (fail)    -> console.log FAIL:    fail
-            (update)  -> console.log UPDATE:  update
-
-        )
-
-
 
     #
     # initialize develop objective
@@ -132,10 +118,12 @@ start = (context, notice, moduleFn) ->
 
                 specfile = res[1]
                 return unless specfile?
-                
-                runningTask context.realizers.task 'run', 
 
-                    id:       specfile
+                uuid = getUUID specfile
+
+                taskCallback context.realizers.task 'run', 
+
+                    uuid:     uuid
                     script:   specfile
                     module:   'ipso'
                     class:    'spec'
@@ -169,9 +157,12 @@ start = (context, notice, moduleFn) ->
         done.then(
 
             (res) -> 
-                runningTask context.realizers.task 'run', 
 
-                    id:       file
+                uuid = getUUID file
+
+                taskCallback context.realizers.task 'run', 
+
+                    uuid:     uuid
                     script:   file
                     module:   'ipso'
                     class:    'spec'
