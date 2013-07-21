@@ -121,7 +121,7 @@ start = (context, notice, moduleFn, taskCallback) ->
 
                 uuid = getUUID specfile
 
-                taskCallback context.realizers.task 'run', 
+                taskCallback context.realizers.start
 
                     uuid:     uuid
                     script:   specfile
@@ -160,7 +160,7 @@ start = (context, notice, moduleFn, taskCallback) ->
 
                 uuid = getUUID file
 
-                taskCallback context.realizers.task 'run', 
+                taskCallback context.realizers.start
 
                     uuid:     uuid
                     script:   file
