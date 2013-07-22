@@ -35,38 +35,38 @@ require('nez').realize 'Develop', (Develop, test, context, should) ->
         use:   ->
         
 
-    context 'start', (it) -> 
+    # context 'start', (it) -> 
 
-        it 'sends objective::start event', (done) -> 
+    #     it 'sends objective::start event', (done) -> 
 
-            Develop.start CONTEXT, NOTIFIER, ->
-                NOTIFIED.event['objective::start'].should.eql 
-                    class: 'eo:develop'
-                    properties: CONTEXT
-                test done
+    #         Develop.start CONTEXT, NOTIFIER, ->
+    #             NOTIFIED.event['objective::start'].should.eql 
+    #                 class: 'eo:develop'
+    #                 properties: CONTEXT
+    #             test done
 
 
-    context 'monitor', (it) -> 
+    # context 'monitor', (it) -> 
 
-        it 'monitors default src and spec directories', (done) -> 
+    #     it 'monitors default src and spec directories', (done) -> 
 
-            MONITORED.things = {}
-            Develop.start CONTEXT, NOTIFIER, ->
+    #         MONITORED.things = {}
+    #         Develop.start CONTEXT, NOTIFIER, ->
             
-                should.exist MONITORED.things['./src']
-                should.exist MONITORED.things['./spec']
-                test done
+    #             should.exist MONITORED.things['./src']
+    #             should.exist MONITORED.things['./spec']
+    #             test done
 
-        it 'monitors specified src and spec directory', (done) -> 
+    #     it 'monitors specified src and spec directory', (done) -> 
 
-            MONITORED.things = {}
-            CONTEXT.src = './app'
-            CONTEXT.spec = '/dev/darnit'
-            Develop.start CONTEXT, NOTIFIER, ->
+    #         MONITORED.things = {}
+    #         CONTEXT.src = './app'
+    #         CONTEXT.spec = '/dev/darnit'
+    #         Develop.start CONTEXT, NOTIFIER, ->
             
-                should.exist MONITORED.things['./app']
-                should.exist MONITORED.things['/dev/darnit']
-                test done
+    #             should.exist MONITORED.things['./app']
+    #             should.exist MONITORED.things['/dev/darnit']
+    #             test done
 
     context 'compile', (it) -> 
 
@@ -106,54 +106,35 @@ require('nez').realize 'Develop', (Develop, test, context, should) ->
             Develop.start CONTEXT, NOTIFIER, ->
 
 
-        it 'issues task to realizer on compile success', (done) -> 
+        it 'issues start to realizer on compile success', (done) -> 
 
-            CONTEXT.realizers.task = -> 
+            CONTEXT.realizers.start = -> 
             CONTEXT.tools.compiler.language.compile =    (notice, opts, cb) -> cb null
             CONTEXT.tools.compiler.language.ensureSpec = (notice, opts, cb) -> cb null, './spec/file1_spec'
-            CONTEXT.realizers.task = (title, realizer) -> 
+            CONTEXT.realizers.start = (realizer) -> 
 
-                realizer.id.should.equal './spec/file1_spec'
-                CONTEXT.realizers.task = ->
-                test done
+                realizer.uuid.should.equal './spec/file1_spec'
+                CONTEXT.realizers.start = ->
+                    test done
 
             Develop.start CONTEXT, NOTIFIER, -> 
 
-
-        # it 'does not call the realizer if the spec was just created', (done) -> 
-
-        #     #
-        #     # ensureSpec callsback with no specfile name if it just created the specfile
-        #     #
-        #     # - this prevents the realizer running the spec twice 
-        #     #   (for the src change and then for the spec create)
-        #     # 
-
-        #     CONTEXT.tools.compiler.language.compile =    (notice, opts, cb) -> cb null
-        #     CONTEXT.tools.compiler.language.ensureSpec = (notice, opts, cb) -> cb null #, './spec/file_spec'
-
-        #     Develop.start CONTEXT, NOTIFIER, -> 
-
-        #     setTimeout (->
-
-        #         console.log RAN_REALIZER
-
-        #     ), 10
 
     context 'spec', (it) -> 
 
         it 'issues task to realizer on spec change', (done) -> 
 
+            CONTEXT.tools.compiler.language.compile = (notice, opts, cb) -> cb null
+            CONTEXT.tools.compiler.language.ensureSpec = (notice, opts, cb) -> cb null, './spec/file_spec'
             CONTEXT.tools.monitor.directory = (notice, dir, cb) -> 
 
                 if dir.match /spec/
                     cb 'changed', './spec/file_spec'
 
-            CONTEXT.realizers.task = (title, context) -> 
+            CONTEXT.realizers.start = (context) ->         
 
-                title.should.equal 'run'
                 context.should.eql 
-                    id:     './spec/file1_spec'
+                    uuid:   './spec/file1_spec'
                     script: './spec/file1_spec'
                     module: 'ipso'
                     class: 'spec'

@@ -123,8 +123,28 @@ start = (context, notice, moduleFn, taskCallback) ->
 
                 taskCallback context.realizers.start
 
+                    #
+                    # realizer spawn parameters
+                    # -------------------------
+                    # 
+                    # * providing the realizer collection with a script (filename, [[uri later?]])
+                    #   will result in the spawning of the realizer (as child process) if not
+                    #   already spawned
+                    # 
+                    # 
+
                     uuid:     uuid
                     script:   specfile
+
+                    #
+                    # plugin parameters
+                    # -----------------
+                    #
+                    # * configures the module::class::function that will
+                    #   perform the services/runtime injection into the 
+                    #   realizer loop
+                    # 
+
                     module:   'ipso'
                     class:    'spec'
                     function: 'run'
@@ -164,6 +184,7 @@ start = (context, notice, moduleFn, taskCallback) ->
 
                     uuid:     uuid
                     script:   file
+
                     module:   'ipso'
                     class:    'spec'
                     function: 'run'
