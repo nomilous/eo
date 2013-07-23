@@ -64,9 +64,9 @@ eo = (context, notice, moduleFn) ->
 
         task.then(
 
-            (succeed) -> console.log SUCCEED: succeed
-            (fail)    -> console.log FAIL:    fail
-            (update)  -> console.log UPDATE:  update
+            (resolve) -> console.log RESOLVE: resolve
+            (reject)  -> console.log REJECT:  reject
+            (notify)  -> console.log NOTIFY:  notify
 
         )
 
