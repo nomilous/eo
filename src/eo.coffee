@@ -62,13 +62,17 @@ eo = (context, notice, moduleFn) ->
 
     context.module.start context, notice, moduleFn, (task) -> 
 
-        task.then(
+        #
+        # TEMPORARY: silence objective-side output
+        #
 
-            (resolve) -> console.log RESOLVE: resolve
-            (reject)  -> console.log REJECT:  reject
-            (notify)  -> console.log NOTIFY:  notify
+        # task.then(
 
-        )
+        #     (resolve) -> console.log RESOLVE: resolve
+        #     (reject)  -> console.log REJECT:  reject
+        #     (notify)  -> console.log NOTIFY:  notify
+
+        # )
 
 
 eo.validate    = validate
